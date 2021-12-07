@@ -6,6 +6,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - id: foo
-        uses: tlambert03/napari-plugin-action@v0.0.1
+        uses: tlambert03/napari-plugin-action@v0.0.2
         with:
           package_name: 'napari-dv'
