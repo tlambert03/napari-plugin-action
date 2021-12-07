@@ -1,21 +1,38 @@
-name: 'Hello World'
-description: 'Greet someone'
+name: "Napari Plugin Test"
 inputs:
-  who-to-greet:  # id of input
-    description: 'Who to greet'
-    required: true
-    default: 'World'
-outputs:
-  random-number:
-    description: "Random number"
-    value: ${{ steps.random-number-generator.outputs.random-id }}
+  package_name:  # id of input
+    description: 'Name of package, defaults to package found in action directory'
+    required: false
+description: "Check that a repo can be installed and is detected by napari."
 runs:
   using: "composite"
   steps:
-    - run: echo Hello ${{ inputs.who-to-greet }}.
+    - uses: actions/checkout@v2
+    - uses: tlambert03/setup-qt-libs@v1
+
+    - name: Install dependencies
       shell: bash
-    - id: random-number-generator
-      run: echo "::set-output name=random-id::$(echo $RANDOM)"
+      run: |
+        pip install -U pip
+        pip install napari PySide2 pytest
+
+    - name: Install ${{ inputs.package_name }}
       shell: bash
-    - run: ${{ github.action_path }}/goodbye.sh
+      run: pip install ${{ inputs.package_name }}
+
+    - name: Test plugin on PySide2
       shell: bash
+      run: pytest ${{ github.action_path }}/test_plugin.py
+      env:
+        NAPARI_PLUGIN: ${{ inputs.package_name }}
+
+    - name: Switch backend
+      shell: bash
+      run: |
+        pip uninstall -y PySide2 shiboken2
+        pip install PyQt5
+
+    - name: Test plugin on PyQt5
+      run: pytest ${{ github.action_path }}/test_plugin.py
+      env:
+        NAPARI_PLUGIN: ${{ inputs.package_name }}
