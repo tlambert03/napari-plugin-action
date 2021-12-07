@@ -3,11 +3,6 @@ inputs:
   package_name: # id of input
     description: "Name of package, defaults to package found in action directory"
     required: false
-  shell:
-    description: "Name of shell to use"
-    required: false
-    default: 'bash'
-
 description: "Check that a repo can be installed and is detected by napari."
 runs:
   using: "composite"
@@ -15,29 +10,29 @@ runs:
     - uses: tlambert03/setup-qt-libs@v1
 
     - name: Install dependencies
-      shell: ${{ inputs.shell }}
+      shell: bash
       run: |
         pip install -U pip
         pip install napari PySide2 pytest
 
     - name: Install This package
-      shell: ${{ inputs.shell }}
+      shell: bash
       run: pip install ${{ github.workspace }}
 
     - name: Test plugin on PySide2
-      shell: ${{ inputs.shell }}
+      shell: bash
       run: pytest ${{ github.action_path }}/test_plugin.py
       env:
         NAPARI_PLUGIN: ${{ inputs.package_name }}
 
     - name: Switch backend
-      shell: ${{ inputs.shell }}
+      shell: bash
       run: |
         pip uninstall -y PySide2 shiboken2
         pip install PyQt5
 
     - name: Test plugin on PyQt5
-      shell: ${{ inputs.shell }}
+      shell: bash
       run: pytest ${{ github.action_path }}/test_plugin.py
       env:
         NAPARI_PLUGIN: ${{ inputs.package_name }}
