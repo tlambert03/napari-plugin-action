@@ -1,7 +1,7 @@
 name: "Napari Plugin Test"
 inputs:
-  package_name:  # id of input
-    description: 'Name of package, defaults to package found in action directory'
+  package_name: # id of input
+    description: "Name of package, defaults to package found in action directory"
     required: false
 description: "Check that a repo can be installed and is detected by napari."
 runs:
@@ -33,6 +33,7 @@ runs:
         pip install PyQt5
 
     - name: Test plugin on PyQt5
+      shell: bash
       run: pytest ${{ github.action_path }}/test_plugin.py
       env:
         NAPARI_PLUGIN: ${{ inputs.package_name }}
