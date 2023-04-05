@@ -1,5 +1,9 @@
 # napari-plugin-action
 
+**ARCHIVED** this action is unmaintained
+
+---------------
+
 this is a WIP github action that you can use to test a couple things about your plugin.
 
 Currently this likely only works for **first generation** plugins.  (npe2 coming later)
